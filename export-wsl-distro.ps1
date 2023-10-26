@@ -1,70 +1,4 @@
 
-# Export WSL Distro with Powershell Script
-
-```markdown
-> Austin.Lai |
-> -----------| October 26th, 2023
-> -----------| Updated on October 26th, 2023
-```
-
----
-
-## Table of Contents
-
-<!-- TOC -->
-
-- [Export WSL Distro with Powershell Script](#export-wsl-distro-with-powershell-script)
-    - [Table of Contents](#table-of-contents)
-    - [Disclaimer](#disclaimer)
-    - [Description](#description)
-    - [export-wsl-distro](#export-wsl-distro)
-
-<!-- /TOC -->
-
-<br>
-
-## Disclaimer
-
-<span style="color: red; font-weight: bold;">DISCLAIMER:</span>
-
-This project/repository is provided "as is" and without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
-
-This project/repository is for <span style="color: red; font-weight: bold;">Educational</span> purpose <span style="color: red; font-weight: bold;">ONLY</span>. Do not use it without permission. The usual disclaimer applies, especially the fact that me (Austin) is not liable for any damages caused by direct or indirect use of the information or functionality provided by these programs. The author or any Internet provider bears NO responsibility for content or misuse of these programs or any derivatives thereof. By using these programs you accept the fact that any damage (data loss, system crash, system compromise, etc.) caused by the use of these programs is not Austin responsibility.
-
-<br>
-
-## Description
-
-<!-- Description -->
-
-Simple PowerShell script as a helper or tool to help you export WSL distro.
-
-<span style="color: orange; font-weight: bold;">Note:</span>
-
-- The configurations in this project/repository are for your reference:
-    - <span style="color: green; font-weight: bold;">Docker Desktop</span> is running and configured as start on boot.
-    - Assuming you have installed <span style="color: green; font-weight: bold;">Docker Desktop</span> at `"C:\Program Files\Docker\Docker\Docker Desktop.exe"`.
-    - A default path of `"C:\Users\$env:UserName\Desktop"` is used as destination.
-- A powershell script file:
-    - [export-wsl-distro](#export-wsl-distro)
-- Please change the configuration accordingly to suits your environment.
-
-<!-- /Description -->
-
-<br>
-
-## export-wsl-distro
-
-The `export-wsl-distro.ps1` file can be found [here](./export-wsl-distro.ps1) or below:
-
-<details>
-
-<summary><span style="padding-left:10px;">Click here to expand and check out the powershell script !!!</span>
-
-</summary>
-
-```powershell
-
 
 
 function Check-IsElevated {
@@ -305,9 +239,3 @@ else {
 }
 
 
-
-```
-
-</details>
-
-<br>
