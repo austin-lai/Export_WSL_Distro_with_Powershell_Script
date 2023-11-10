@@ -4,7 +4,7 @@
 ```markdown
 > Austin.Lai |
 > -----------| October 26th, 2023
-> -----------| Updated on October 26th, 2023
+> -----------| Updated on November 10th, 2023
 ```
 
 ---
@@ -65,8 +65,6 @@ The `export-wsl-distro.ps1` file can be found [here](./export-wsl-distro.ps1) or
 
 ```powershell
 
-
-
 function Check-IsElevated {
   $id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
   $p = New-Object System.Security.Principal.WindowsPrincipal($id)
@@ -93,6 +91,8 @@ function StopProcessByName ($processName) {
 
     Write-Host "`n [:::Information:::] The process $processName has been stopped" -ForegroundColor Blue -BackgroundColor Black 
 
+    Start-Sleep -Seconds 10
+
   } else {
 
     # If the process is not running, display a message
@@ -105,6 +105,13 @@ function StopProcessByName ($processName) {
 
 # Define the function to check for specific errors for Shutting down "Docker Desktop" and "WSL" and retry
 function CheckErrorAndRetry {
+  
+    # Define the command to shutdown WSL
+    $ShutdownWSL = "wsl --shutdown"
+  
+    # Define the command to export the WSL distribution to a VHD file
+    # Use string interpolation to build the WSL export command
+    $wslExportCommand = "wsl --export $selectedDistro $exportPath --vhd"
 
     Write-Host "`n [:::Action:::] Shutting down `"Docker Desktop`" ........." -ForegroundColor Magenta -BackgroundColor Black
 
@@ -118,6 +125,8 @@ function CheckErrorAndRetry {
     Invoke-Expression $ShutdownWSL
 
     $ShutdownWSL_Status = $?
+
+    Start-Sleep -Seconds 10
 
     if ($ShutdownWSL_Status -and $StopProcessByName_Status ){
 
@@ -157,6 +166,8 @@ function StartDockerDesktop {
 
         StartDockerDesktop
 
+        Start-Sleep -Seconds 10
+
     }
 
 }
@@ -181,18 +192,28 @@ if (Check-IsElevated) {
 
     do {
 
-        # Prompt the user to choose a WSL distro
-        $selectedDistro = Read-Host "`n Enter the name of the distro you want to export"
+        $default_selectedDistro = "kali-linux"
 
+        # Prompt the user to choose a WSL distro
+        $selectedDistro = Read-Host "`n Enter the name of the distro you want to export or press `"Enter`" to use the default selected disro ( $default_selectedDistro )"
+
+        if ($selectedDistro -eq "") {
+
+          $selectedDistro = $default_selectedDistro
+          
+        }
+        
         # Validate user input, must be from the list
         if ($WSL_Distro_List -contains $selectedDistro) {
 
             # Valid input, set $validDistro = $true and exit the loop
-            $validDistro = $false
+            $validDistro = $true
 
             break
         }
         else {
+          
+            $validDistro = $false
 
             # Invalid input, display an error message and repeat the loop
             Write-Host "`n [:::Warning:::] Invalid distro choice. Please select a valid distro from the list." -ForegroundColor White -BackgroundColor DarkRed
@@ -249,7 +270,7 @@ if (Check-IsElevated) {
     # if ($CheckErrorAndRetry_Status = $?){
     if ($CheckErrorAndRetry_Status -eq $true){
 
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds 10
             
         if (Test-Path $exportPath) {
 
@@ -266,6 +287,8 @@ if (Check-IsElevated) {
             Write-Host "`n [:::Warning:::] $exportPath does not exist." -ForegroundColor White -BackgroundColor DarkRed
 
             Write-Host "`n [:::Warning:::] Re-run CheckErrorAndRetry." -ForegroundColor White -BackgroundColor DarkRed
+
+            $export_status = $false
 
             CheckErrorAndRetry
         }
@@ -285,12 +308,11 @@ if (Check-IsElevated) {
     # Clean-up
     if ($export_status = $true){
         
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds 10
 
         Write-Host "`n [:::Information:::] Starting `"Docker Desktop`" process." -ForegroundColor Blue -BackgroundColor Black
 
         StartDockerDesktop
-
 
     }
 
@@ -303,9 +325,6 @@ else {
   exit
 
 }
-
-
-
 ```
 
 </details>
